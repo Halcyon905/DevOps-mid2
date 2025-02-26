@@ -1,14 +1,47 @@
 version: '3'
 services:
 
-  video-streaming:
+  reverse-proxy:
+    image: nginx
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx-reverse-proxy
+    ports:
+      - 443:443
+
+  video-streaming-1:
     image: video-streaming
     build: 
       context: ./video-streaming
       dockerfile: Dockerfile
-    container_name: video-streaming
+    container_name: video-streaming-1
     ports:
-     - "4000:80"
+     - "3001:443"
     environment:
-      - PORT=80
+      - PORT=443
+    restart: "no"
+
+  video-streaming-2:
+    image: video-streaming
+    build: 
+      context: ./video-streaming
+      dockerfile: Dockerfile
+    container_name: video-streaming-2
+    ports:
+     - "3002:443"
+    environment:
+      - PORT=443
+    restart: "no"
+
+  video-streaming-3:
+    image: video-streaming
+    build: 
+      context: ./video-streaming
+      dockerfile: Dockerfile
+    container_name: video-streaming-3
+    ports:
+     - "3003:443"
+    environment:
+      - PORT=443
     restart: "no"
